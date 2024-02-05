@@ -1,16 +1,42 @@
 import { useEffect, useState } from "react";
-import { fetchCommentsByArticles } from "../utils/api";
-import { formatDate } from "../utils/api";
+import { useParams } from "react-router-dom";
+import {
+  fetchCommentsByArticleId,
+  formatDate,
+  fetchArticleByArticleId,
+  patchVoteByID,
+} from "../utils/api";
+
 export default function SingleArticle(props) {
   const [comments, setComments] = useState([]);
-
-  const { singleArticle } = props;
+  const [singleArticle, setSingleArticle] = useState([]);
+  const [vote, setVote] = useState();
+  const { article_id } = useParams();
 
   useEffect(() => {
-    fetchCommentsByArticles(singleArticle.article_id).then((res) => {
+    fetchArticleByArticleId(article_id).then(({ result }) => {
+      setSingleArticle(result[0]);
+      setVote(result[0].votes);
+    });
+  }, []);
+
+  useEffect(() => {
+    fetchCommentsByArticleId(article_id).then((res) => {
       setComments(res);
     });
   }, []);
+
+  // patchVoteByID;
+  function upVote() {
+    patchVoteByID(article_id, { IncrementBy: "1" }).then((result) => {
+      setVote(result);
+    });
+  }
+  function downVote() {
+    patchVoteByID(article_id, { IncrementBy: "-1" }).then((result) => {
+      setVote(result);
+    });
+  }
 
   return (
     <>
@@ -25,11 +51,13 @@ export default function SingleArticle(props) {
           <div className="title">
             <h3>{singleArticle.title}</h3>
           </div>
+          <p>{singleArticle.body}</p>
           <div className="article_author">
-            <p>{singleArticle.author}</p>
+            <p>{`Post created by: ${singleArticle.author}`}</p>
           </div>
           <div className="article_details">
-            <p>{`Votes: ${singleArticle.votes} `}</p>
+            <p>{`Votes: ${vote} `}</p> <button onClick={upVote}>up vote</button>
+            <button onClick={downVote}>down vote</button>
             <p>{`comments: ${singleArticle.comment_count} `}</p>
           </div>
           <p>{formatDate(singleArticle.created_at)}</p>

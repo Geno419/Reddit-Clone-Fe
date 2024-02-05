@@ -10,12 +10,23 @@ export const fetchAllArticles = () => {
   });
 };
 
-export const fetchCommentsByArticles = (article_id) => {
+export const fetchCommentsByArticleId = (article_id) => {
   return myApi.get(`/articles/${article_id}/comments`).then((res) => {
     return res.data.comments;
   });
 };
 
+export const fetchArticleByArticleId = (article_id) => {
+  return myApi.get(`/articles/${article_id}`).then((res) => {
+    return res.data;
+  });
+};
+
+export const patchVoteByID = (article_id, IncrementByObj) => {
+  return myApi.patch(`/articles/${article_id}`, IncrementByObj).then((res) => {
+    return res.data.votes;
+  });
+};
 export function formatDate(newDate) {
   const date = new Date(newDate);
   const year = date.getFullYear();

@@ -13,9 +13,9 @@ export default function AllArticles(props) {
       setLoading(false);
     });
   }, []);
-  function handleClick(article) {
-    setSingleArticle(article);
-  }
+  // function handleClick(article) {
+  //   setSingleArticle(article);
+  // }
   // function handleCategoryChange() {}
   return (
     <>
@@ -43,11 +43,11 @@ export default function AllArticles(props) {
           {allArticles.length > 0 ? (
             allArticles.map((article) => (
               <Link
-                to="SingleArticle"
+                to={`/SingleArticle/${article.article_id}`}
                 className="article"
-                onClick={() => {
-                  handleClick(article);
-                }}
+                // onClick={() => {
+                //   handleClick(article);
+                // }}
                 key={article.article_id}
               >
                 <div>

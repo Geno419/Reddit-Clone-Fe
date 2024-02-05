@@ -14,10 +14,7 @@ function App() {
           path="/"
           element={<AllArticles setSingleArticle={setSingleArticle} />}
         />
-        <Route
-          path="/SingleArticle"
-          element={<SingleArticle singleArticle={singleArticle} />}
-        />
+        <Route path="/SingleArticle/:article_id" element={<SingleArticle />} />
       </Routes>
     </main>
   );
