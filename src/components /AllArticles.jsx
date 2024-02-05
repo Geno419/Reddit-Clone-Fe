@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchAllArticles } from "./utils/api";
+import { fetchAllArticles } from "../utils/api";
 import { Link } from "react-router-dom";
 
 export default function AllArticles(props) {
@@ -16,10 +16,25 @@ export default function AllArticles(props) {
   function handleClick(article) {
     setSingleArticle(article);
   }
-
+  // function handleCategoryChange() {}
   return (
     <>
-      <h2>Articles</h2>
+      <input type="text" placeholder="Create Post" />
+      <br />
+
+      {/* <label>
+        Filter by category:
+        <select onChange={handleCategoryChange}>
+          <option value="all">All</option>
+          {categories.map((category) => {
+            return (
+              <option value={category.category_name}>
+                {category.category_name}
+              </option>
+            );
+          })}
+        </select>
+      </label> */}
 
       {loading ? (
         <p>Loading...</p>
@@ -33,8 +48,9 @@ export default function AllArticles(props) {
                 onClick={() => {
                   handleClick(article);
                 }}
+                key={article.article_id}
               >
-                <div key={article.article_id}>
+                <div>
                   <figure>
                     <img
                       src={article.article_img_url}
@@ -45,11 +61,11 @@ export default function AllArticles(props) {
                     <div className="title">
                       <h3>{article.title}</h3>
                     </div>
-                    <div article_author>
+                    <div className="article_author">
                       <p>{article.author}</p>
                     </div>
                     <div className="article_details">
-                      <p>{`Votes: ${article.votes} `}</p>
+                      <p className="votes">{`Votes: ${article.votes} `}</p>
                       <p>{`comments: ${article.comment_count} `}</p>
                     </div>
                   </section>

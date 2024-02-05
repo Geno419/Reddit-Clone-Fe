@@ -1,20 +1,17 @@
+import { useEffect, useState } from "react";
+import { fetchCommentsByArticles } from "../utils/api";
+import { formatDate } from "../utils/api";
 export default function SingleArticle(props) {
+  const [comments, setComments] = useState([]);
+
   const { singleArticle } = props;
-  const date = new Date(singleArticle.created_at);
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
 
-  const formattedTime = `Posted on the ${day < 10 ? "0" + day : day}-${
-    month < 10 ? "0" + month : month
-  }-${year} at ${hours < 10 ? "0" + hours : hours}:${
-    minutes < 10 ? "0" + minutes : minutes
-  }`;
+  useEffect(() => {
+    fetchCommentsByArticles(singleArticle.article_id).then((res) => {
+      setComments(res);
+    });
+  }, []);
 
-  console.log(formattedTime);
-  console.log(singleArticle);
   return (
     <>
       <div>
@@ -24,19 +21,32 @@ export default function SingleArticle(props) {
             alt={`Image for ${singleArticle.authors} post`}
           />
         </figure>
-        <section>
+        <div>
           <div className="title">
             <h3>{singleArticle.title}</h3>
           </div>
-          <div article_author>
+          <div className="article_author">
             <p>{singleArticle.author}</p>
           </div>
           <div className="article_details">
             <p>{`Votes: ${singleArticle.votes} `}</p>
             <p>{`comments: ${singleArticle.comment_count} `}</p>
           </div>
-          <p>{formattedTime}</p>
-        </section>
+          <p>{formatDate(singleArticle.created_at)}</p>
+        </div>
+        <div className="comments">
+          {comments.map((comment) => {
+            return (
+              <div className="comment" key={comment.comment_id}>
+                <h5>{comment.author}</h5>
+                <p>{formatDate(comment.created_at)}</p>
+                <p></p>
+                <p>{comment.body}</p>
+                <p>{`votes: ${comment.votes}`}</p>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </>
   );
