@@ -5,7 +5,7 @@
 
   color-scheme: light dark;
   color: black;
-  background-color: white;
+  background-color: brown;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -23,16 +23,20 @@
   margin: 0;
   padding: 0;
 }
-body {
-  border: solid 0.5em black;
-  background-color: brown;
-}
+
 main {
   border: solid 0.5em black;
   background-color: white;
 }
 Header {
   border-bottom: solid 0.5em black;
+}
+a {
+  color: inherit;
+  text-decoration: inherit;
+  display: inherit;
+  width: inherit;
+  height: inherit;
 }
 h1 {
   font-size: 3.2em;
@@ -48,14 +52,13 @@ h1 {
     border: solid 0.5em black;
     margin: 0.5em;
   }
-  figure {
-    img {
-      height: 100%;
-      width: 100%;
-    }
-  }
+
   .article_details {
     display: flex;
     justify-content: center;
   }
+}
+img {
+  height: 100%;
+  width: 100%;
 }
