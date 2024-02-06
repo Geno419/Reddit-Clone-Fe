@@ -5,13 +5,16 @@ import {
   formatDate,
   fetchArticleByArticleId,
   patchVoteByID,
+  postComment,
 } from "../utils/api";
 
 export default function SingleArticle(props) {
   const [comments, setComments] = useState([]);
   const [singleArticle, setSingleArticle] = useState([]);
   const [vote, setVote] = useState();
+  const [voted, setVoted] = useState(false);
   const { article_id } = useParams();
+  const { user } = props;
 
   useEffect(() => {
     fetchArticleByArticleId(article_id).then(({ result }) => {
@@ -26,56 +29,84 @@ export default function SingleArticle(props) {
     });
   }, []);
 
-  // patchVoteByID;
   function upVote() {
-    patchVoteByID(article_id, { IncrementBy: "1" }).then((result) => {
-      setVote(result);
-    });
-  }
-  function downVote() {
-    patchVoteByID(article_id, { IncrementBy: "-1" }).then((result) => {
-      setVote(result);
-    });
+    if (!voted) {
+      setVote(vote + 1);
+      patchVoteByID(article_id, { IncrementBy: "1" });
+      setVoted(true);
+    }
   }
 
+  function downVote() {
+    if (!voted) {
+      setVote(vote - 1);
+      patchVoteByID(article_id, { IncrementBy: "-1" });
+      setVoted(true);
+    }
+  }
+  function addComment(event) {
+    event.preventDefault();
+    const newComment = {
+      author: user.username,
+      body: event.target[0].value,
+      created_at: new Date(),
+      votes: 0,
+    };
+    const packageComment = {
+      username: user.username,
+      body: event.target[0].value,
+    };
+    event.target[0].value = "";
+    setComments([newComment, ...comments]);
+    postComment(article_id, packageComment).then((res) => {});
+  }
   return (
     <>
-      <div>
-        <figure>
-          <img
-            src={singleArticle.article_img_url}
-            alt={`Image for ${singleArticle.authors} post`}
-          />
-        </figure>
+      <article className="single_article">
         <div>
           <div className="title">
             <h3>{singleArticle.title}</h3>
           </div>
           <p>{singleArticle.body}</p>
+          <figure>
+            <img
+              src={singleArticle.article_img_url}
+              alt={`Image for ${singleArticle.authors} post`}
+            />
+          </figure>
           <div className="article_author">
             <p>{`Post created by: ${singleArticle.author}`}</p>
           </div>
-          <div className="article_details">
-            <p>{`Votes: ${vote} `}</p> <button onClick={upVote}>up vote</button>
-            <button onClick={downVote}>down vote</button>
-            <p>{`comments: ${singleArticle.comment_count} `}</p>
+          <div className=" single_article_details">
+            <p>{`Votes: ${vote} `}</p>
+            <button onClick={upVote} disabled={voted}>
+              up vote
+            </button>
+            <button onClick={downVote} disabled={voted}>
+              down vote
+            </button>
+            <p>{`comments: ${comments.length} `}</p>
           </div>
-          <p>{formatDate(singleArticle.created_at)}</p>
+          <p className="date">{formatDate(singleArticle.created_at)}</p>
         </div>
+        <form onSubmit={addComment} className="addComment">
+          <label htmlFor="newComment"></label>
+          <input type="text" placeholder="add a comment" />
+        </form>
+
         <div className="comments">
           {comments.map((comment) => {
             return (
               <div className="comment" key={comment.comment_id}>
                 <h5>{comment.author}</h5>
-                <p>{formatDate(comment.created_at)}</p>
-                <p></p>
                 <p>{comment.body}</p>
                 <p>{`votes: ${comment.votes}`}</p>
+                <p className="date">{formatDate(comment.created_at)}</p>
               </div>
             );
           })}
         </div>
-      </div>
+      </article>
     </>
   );
 }

@@ -27,6 +27,22 @@ export const patchVoteByID = (article_id, IncrementByObj) => {
     return res.data.votes;
   });
 };
+
+export const fetchAllTopics = () => {
+  return myApi.get(`/topics`).then((res) => {
+    return res.data.topics;
+  });
+};
+
+export const fetchUsers = () => {
+  return myApi.get(`/users`).then((res) => {
+    return res.data.users;
+  });
+};
+export const postComment = (article_id, newComment) => {
+  return myApi.post(`/articles/${article_id}/comments`, newComment);
+};
+
 export function formatDate(newDate) {
   const date = new Date(newDate);
   const year = date.getFullYear();

@@ -1,77 +1,199 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --main-color: #17202a;
+  --primary-color: #0e4c92;
+  --secondary-color: #2c3e50;
+  --text-color: #fdfdfdd8;
+  --accent-color: #3498db;
+  --white-color: #ffffff;
+  --black-color: #000000;
+}
+
+body {
+  font-family: Inter, system-ui, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: white;
-  color: black;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  color: var(--text-color);
+  background-color: var(--main-color);
+  margin: 0;
+  padding: 0;
 }
 
 #root {
-  margin: 0 auto;
+  margin: 0;
   text-align: center;
 }
-* {
-  margin: 0;
+
+header {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-main {
-  background-color: white;
-}
-header {
-  display: flex;
-  border-bottom: solid 0.5em black;
-}
 a {
   color: inherit;
-  text-decoration: inherit;
-  display: inherit;
-  width: inherit;
-  height: inherit;
+  text-decoration: none;
+}
+
+input[type="text"],
+select {
+  padding: 0.5rem;
+  border: 1px solid var(--secondary-color);
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  background-color: var(--white-color);
+  color: var(--black-color);
 }
 
 .all_Articles {
   display: flex;
   flex-wrap: wrap;
-  font-size: 0.7em;
   justify-content: center;
-  .article {
-    max-width: 25%;
-    border: solid 0.5em black;
-    margin: 0.5em;
-    position: relative;
-  }
-  .article_author {
-    margin-bottom: 3.1em;
-  }
-  .article_details {
-    color: white;
-    background-color: black;
-    display: flex;
-    justify-content: center;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-
-    .votes {
-      margin-right: 0.45em;
-    }
-  }
 }
-img {
-  height: 100%;
+.date {
+  font-size: 0.8rem;
+  margin: 0;
+  padding: 0;
+}
+.article {
+  width: calc(33.3333% - 1rem);
+  font-size: 0.8rem;
+  border: 1px solid var(--secondary-color);
+  position: relative;
+  transition: transform 0.3s ease;
+  overflow: hidden;
+  margin: 0.5rem 0.25rem;
+}
+
+.article:hover {
+  transform: translateY(-5px);
+}
+
+.article_details {
+  margin-bottom: 4rem;
+}
+.article img {
   width: 100%;
+  height: auto;
+}
+
+.vote_comment {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  bottom: 0;
 }
 
 .comments {
-  border-top: 0.5em black solid;
+  border-top: 1px solid var(--secondary-color);
+}
+
+.single_article img {
+  max-width: 100%;
+  height: auto;
+}
+.single_article_details {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25rem;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  background-color: var(--accent-color);
+  color: var(--white-color);
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: var(--secondary-color);
+}
+
+.comment {
+  padding: 0.5rem 4rem;
+  border-bottom: 1px solid var(--secondary-color);
+}
+
+.comment h5 {
+  margin-bottom: 0.5rem;
+}
+
+.comment p {
+  margin-bottom: 0.5rem;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+.loading p {
+  font-size: 1.2rem;
+}
+.userProfile * {
+  margin: 0;
+  padding: 0;
+}
+.userProfile {
+  background-color: var(--main-color);
+  border: 1px solid var(--white-color);
+  max-width: 4rem;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.6rem;
+  padding: 0.15rem;
+  border-radius: 1rem;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.userProfile figure {
+  padding: 0;
+  padding-right: 0.1rem;
+  margin: 0;
+  width: 50%;
+}
+.userProfile img {
+  width: 100%;
+  height: auto;
+}
+@media screen and (min-width: 768px) {
+  .article {
+    width: 25%;
+  }
   .comment {
-    margin-top: 0.25em;
-    border-bottom: 0.5em black solid;
+    padding: 0.5rem 12rem;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .article {
+    width: calc(50% - 1rem);
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .article {
+    width: 100%;
   }
 }
