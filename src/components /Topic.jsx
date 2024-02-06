@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { fetchAllArticles, fetchAllTopics } from "../utils/api";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
-export default function AllArticles() {
+export default function Topic() {
+  const { topic } = useParams();
   const [allArticles, setAllArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [topics, setTopics] = useState([]);
@@ -10,6 +11,7 @@ export default function AllArticles() {
 
   useEffect(() => {
     fetchAllArticles().then((articles) => {
+      articles = articles.filter((article) => article.topic === topic);
       setAllArticles(articles);
       setLoading(false);
     });
@@ -20,6 +22,7 @@ export default function AllArticles() {
       setTopics(res);
     });
   }, []);
+
   function handleTopicChange(event) {
     const path = event.target.value;
     if (path === "/") {
@@ -27,6 +30,7 @@ export default function AllArticles() {
     } else {
       navigate(`/topic/${path}`);
     }
+    window.location.reload();
   }
   return (
     <>
@@ -35,7 +39,7 @@ export default function AllArticles() {
 
       <label>
         Filter by category:
-        <select onChange={handleTopicChange}>
+        <select value={topic} onChange={handleTopicChange}>
           <option value="/">All</option>
           {topics.map((topic) => {
             return (

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Header, AllArticles, SingleArticle } from "./components /Index";
+import { Header, AllArticles, SingleArticle, Topic } from "./components /Index";
 import { Routes, Route } from "react-router-dom";
 import { fetchUsers } from "./utils/api";
 
@@ -9,7 +9,7 @@ function App() {
 
   useEffect(() => {
     fetchUsers().then((res) => {
-      setUser(res[4]); //use this to change user range 0-5
+      setUser(res[2]);
     });
   }, []);
   return (
@@ -19,6 +19,10 @@ function App() {
         <Route
           path="/"
           element={<AllArticles setSingleArticle={setSingleArticle} />}
+        />
+        <Route
+          path="/topic/:topic"
+          element={<Topic setSingleArticle={setSingleArticle} />}
         />
         <Route
           path="/SingleArticle/:article_id"

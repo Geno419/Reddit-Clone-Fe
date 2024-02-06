@@ -58,8 +58,11 @@ export default function SingleArticle(props) {
       body: event.target[0].value,
     };
     event.target[0].value = "";
+    const holdComments = [...comments];
     setComments([newComment, ...comments]);
-    postComment(article_id, packageComment).then((res) => {});
+    postComment(article_id, packageComment).then((res) => {
+      setComments([res.data.comment[0], ...holdComments]);
+    });
   }
   function deleteComment(comment_id) {
     setComments(

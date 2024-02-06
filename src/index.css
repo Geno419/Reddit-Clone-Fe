@@ -14,19 +14,16 @@ body {
   font-weight: 400;
   color: var(--text-color);
   background-color: var(--main-color);
-  margin: 0;
-  padding: 0;
+  margin: 0 0.1rem;
 }
 
 #root {
-  margin: 0;
   text-align: center;
 }
 
 header {
   background-color: var(--primary-color);
   color: var(--white-color);
-  padding: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
