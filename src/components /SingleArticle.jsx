@@ -6,6 +6,7 @@ import {
   fetchArticleByArticleId,
   patchVoteByID,
   postComment,
+  removeCommentFromDB,
 } from "../utils/api";
 
 export default function SingleArticle(props) {
@@ -60,6 +61,28 @@ export default function SingleArticle(props) {
     setComments([newComment, ...comments]);
     postComment(article_id, packageComment).then((res) => {});
   }
+  function deleteComment(comment_id) {
+    setComments(
+      comments.filter((comment) => comment.comment_id !== comment_id)
+    );
+    removeCommentFromDB(comment_id);
+  }
+  function createDeleteButton(comment) {
+    if (user.username === comment.author) {
+      return (
+        <button
+          onClick={() => {
+            deleteComment(comment.comment_id);
+          }}
+          className="deleteButton"
+        >
+          bin
+        </button>
+      );
+      S;
+    }
+  }
+
   return (
     <>
       <article className="single_article">
@@ -89,22 +112,22 @@ export default function SingleArticle(props) {
           </div>
           <p className="date">{formatDate(singleArticle.created_at)}</p>
         </div>
+
         <form onSubmit={addComment} className="addComment">
           <label htmlFor="newComment"></label>
           <input type="text" placeholder="add a comment" />
         </form>
 
         <div className="comments">
-          {comments.map((comment) => {
-            return (
-              <div className="comment" key={comment.comment_id}>
-                <h5>{comment.author}</h5>
-                <p>{comment.body}</p>
-                <p>{`votes: ${comment.votes}`}</p>
-                <p className="date">{formatDate(comment.created_at)}</p>
-              </div>
-            );
-          })}
+          {comments.map((comment) => (
+            <div className="comment" key={comment.comment_id}>
+              <h5>{comment.author}</h5>
+              <p>{comment.body}</p>
+              <p>{`votes: ${comment.votes}`}</p>
+              <p className="date">{formatDate(comment.created_at)}</p>
+              {createDeleteButton(comment)}
+            </div>
+          ))}
         </div>
       </article>
     </>

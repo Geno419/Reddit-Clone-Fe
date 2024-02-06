@@ -9,7 +9,7 @@ function App() {
 
   useEffect(() => {
     fetchUsers().then((res) => {
-      setUser(res[5]);
+      setUser(res[4]); //use this to change user range 0-5
     });
   }, []);
   return (

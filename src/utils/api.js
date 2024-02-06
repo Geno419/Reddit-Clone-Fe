@@ -42,6 +42,9 @@ export const fetchUsers = () => {
 export const postComment = (article_id, newComment) => {
   return myApi.post(`/articles/${article_id}/comments`, newComment);
 };
+export const removeCommentFromDB = (comment_id) => {
+  return myApi.delete(`/comments/${comment_id}`);
+};
 
 export function formatDate(newDate) {
   const date = new Date(newDate);
