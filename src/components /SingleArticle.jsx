@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   fetchCommentsByArticleId,
   fetchArticleByArticleId,
@@ -10,6 +10,7 @@ import {
 import { formatDate } from "../utils/functions";
 
 export default function SingleArticle(props) {
+  const navigate = useNavigate();
   const [comments, setComments] = useState([]);
   const [singleArticle, setSingleArticle] = useState([]);
   const [vote, setVote] = useState();
@@ -18,10 +19,14 @@ export default function SingleArticle(props) {
   const { user } = props;
   const commentMessageToUser = document.getElementById("message_to_user");
   useEffect(() => {
-    fetchArticleByArticleId(article_id).then(({ result }) => {
-      setSingleArticle(result[0]);
-      setVote(result[0].votes);
-    });
+    fetchArticleByArticleId(article_id)
+      .then(({ result }) => {
+        setSingleArticle(result[0]);
+        setVote(result[0].votes);
+      })
+      .catch(() => {
+        navigate(`/NotFound`);
+      });
   }, []);
 
   useEffect(() => {

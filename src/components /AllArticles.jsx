@@ -16,7 +16,7 @@ export default function AllArticles() {
   const [orderParams, setOrderParams] = useSearchParams();
   const paramSrtCriteria = orderParams.get("sortCriteria");
   const paramSortOrder = orderParams.get("sortOrder");
-  const [sortCriteria, setSortCriteria] = useState(paramSrtCriteria);
+  const [sortCriteria, setSortCriteria] = useState(paramSrtCriteria || "date");
   const [sortOrder, setSortOrder] = useState(paramSortOrder);
 
   useEffect(() => {
@@ -64,7 +64,7 @@ export default function AllArticles() {
             onChange={(event) =>
               handleSortCriteriaChange(event, setSortCriteria)
             }
-            value={sortCriteria || "All"}
+            value={sortCriteria}
           >
             <option value="date">Date</option>
             <option value="comment_count">Comment Count</option>

@@ -12,6 +12,7 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
+import NotFound from "./NotFound";
 
 export default function Topic() {
   const { topic } = useParams();
@@ -22,14 +23,18 @@ export default function Topic() {
   const [orderParams, setOrderParams] = useSearchParams();
   const paramSrtCriteria = orderParams.get("sortCriteria");
   const paramSortOrder = orderParams.get("sortOrder");
-  const [sortCriteria, setSortCriteria] = useState(paramSrtCriteria);
+  const [sortCriteria, setSortCriteria] = useState(paramSrtCriteria || "date");
   const [sortOrder, setSortOrder] = useState(paramSortOrder);
 
   useEffect(() => {
-    fetchArticlesWithTopic(topic).then((articles) => {
-      setAllArticles(articles);
-      setLoading(false);
-    });
+    fetchArticlesWithTopic(topic)
+      .then((articles) => {
+        setAllArticles(articles);
+        setLoading(false);
+      })
+      .catch((err) => {
+        navigate("/NotFound");
+      });
     fetchAllTopics().then((res) => {
       setTopics(res);
     });
@@ -80,7 +85,7 @@ export default function Topic() {
         </label>
       </div>
       <button
-        sort_button
+        className="sort_button"
         onClick={() => {
           handleSortOrderChange(setSortOrder, sortOrder);
         }}
