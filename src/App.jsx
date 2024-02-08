@@ -10,12 +10,11 @@ import { Routes, Route } from "react-router-dom";
 import { fetchUsers } from "./utils/api";
 
 function App() {
-  const [singleArticle, setSingleArticle] = useState({});
   const [user, setUser] = useState({});
 
   useEffect(() => {
     fetchUsers().then((res) => {
-      setUser(res[0]);
+      setUser(res[2]);
     });
   }, []);
   return (
@@ -28,7 +27,7 @@ function App() {
           path="/SingleArticle/:article_id"
           element={<SingleArticle user={user} />}
         />
-        <Route path="*" element={<NotFound />} />
+        <Route path="/NotFound" element={<NotFound />} />
       </Routes>
     </main>
   );
