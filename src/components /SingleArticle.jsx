@@ -15,7 +15,8 @@ export default function SingleArticle(props) {
   const [comments, setComments] = useState([]);
   const [singleArticle, setSingleArticle] = useState([]);
   const [vote, setVote] = useState();
-  const [voted, setVoted] = useState(false);
+  const [upVoted, setUpVoted] = useState(false);
+  const [downVoted, setDownVoted] = useState(false);
   const { article_id } = useParams();
   const { user } = props;
   const commentMessageToUser = document.getElementById("message_to_user");
@@ -38,20 +39,39 @@ export default function SingleArticle(props) {
   }, []);
 
   function upVote() {
-    if (!voted) {
+    if (downVoted === true) {
+      setVote(vote + 2);
+      patchVoteByID(article_id, { IncrementBy: "2" });
+      setDownVoted(false);
+      setUpVoted(true);
+    } else if (upVoted === false) {
       setVote(vote + 1);
       patchVoteByID(article_id, { IncrementBy: "1" });
-      setVoted(true);
+      setUpVoted(true);
+    } else if (upVoted === true) {
+      setVote(vote - 1);
+      patchVoteByID(article_id, { IncrementBy: "-1" });
+      setUpVoted(false);
     }
   }
 
   function downVote() {
-    if (!voted) {
+    if (upVoted === true) {
+      setVote(vote - 2);
+      patchVoteByID(article_id, { IncrementBy: "-2" });
+      setUpVoted(false);
+      setDownVoted(true);
+    } else if (downVoted === false) {
       setVote(vote - 1);
       patchVoteByID(article_id, { IncrementBy: "-1" });
-      setVoted(true);
+      setDownVoted(true);
+    } else if (downVoted === true) {
+      setVote(vote + 1);
+      patchVoteByID(article_id, { IncrementBy: "1" });
+      setDownVoted(false);
     }
   }
+
   function addComment(event) {
     commentMessageToUser.style.color = "white";
     commentMessageToUser.innerText = "Posting...";
@@ -131,12 +151,8 @@ export default function SingleArticle(props) {
             </div>
             <div className=" single_article_details">
               <p>{`Votes: ${vote} `}</p>
-              <button onClick={upVote} disabled={voted}>
-                up vote
-              </button>
-              <button onClick={downVote} disabled={voted}>
-                down vote
-              </button>
+              <button onClick={upVote}>up vote</button>
+              <button onClick={downVote}>down vote</button>
               <p>{`comments: ${comments.length} `}</p>
             </div>
             <p className="date">{formatDate(singleArticle.created_at)}</p>

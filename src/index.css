@@ -162,6 +162,10 @@ button:hover {
   background-color: var(--secondary-color);
 }
 
+/* button:active {
+  background-color: var(--secondary-color);
+} */
+
 .comment {
   padding: 0.5rem 4rem;
   border-bottom: 1px solid var(--secondary-color);
