@@ -39,7 +39,6 @@ export default function AllArticles() {
   return (
     <>
       <input type="text" placeholder="Create Post" />
-      <br />
       <div className="alter_article">
         <label>
           Filter by category:

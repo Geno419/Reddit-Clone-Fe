@@ -56,7 +56,6 @@ export default function Topic() {
   return (
     <>
       <input type="text" placeholder="Create Post" />
-      <br />
       <div className="alter_article">
         <label>
           Filter by category:
