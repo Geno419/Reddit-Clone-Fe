@@ -12,10 +12,9 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
-import NotFound from "./NotFound";
 
 export default function Topic() {
-  const { topic } = useParams();
+  let { topic } = useParams();
   const [allArticles, setAllArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [topics, setTopics] = useState([]);
@@ -41,6 +40,13 @@ export default function Topic() {
   }, []);
 
   useEffect(() => {
+    fetchArticlesWithTopic(topic).then((articles) => {
+      setAllArticles(articles);
+      setLoading(false);
+    });
+  }, [topic]);
+
+  useEffect(() => {
     setOrderParams({
       sortCriteria: sortCriteria,
       sortOrder: sortOrder,
@@ -57,6 +63,7 @@ export default function Topic() {
           <select
             value={topic}
             onChange={(event) => {
+              topic = event.target.value;
               handleTopicChange(event, navigate);
             }}
           >

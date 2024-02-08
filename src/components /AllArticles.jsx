@@ -45,7 +45,7 @@ export default function AllArticles() {
           Filter by category:
           <select
             onChange={(event) => {
-              handleTopicChange(event, navigate);
+              handleTopicChange(event, navigate, setTopics);
             }}
           >
             <option value="/">All</option>

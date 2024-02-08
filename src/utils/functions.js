@@ -36,7 +36,6 @@ export function handleTopicChange(event, navigate) {
   } else {
     navigate(`/${path}`);
   }
-  window.location.reload();
 }
 
 export function formatDate(newDate) {
