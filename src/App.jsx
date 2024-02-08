@@ -23,7 +23,7 @@ function App() {
       <Header user={user} />
       <Routes>
         <Route path="/" element={<AllArticles />} />
-        <Route path="/topic/:topic" element={<Topic />} />
+        <Route path="/:topic" element={<Topic />} />
         <Route
           path="/SingleArticle/:article_id"
           element={<SingleArticle user={user} />}

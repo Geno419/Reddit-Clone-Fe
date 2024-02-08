@@ -34,7 +34,7 @@ export function handleTopicChange(event, navigate) {
   if (path === "/") {
     navigate(`/`);
   } else {
-    navigate(`/topic/${path}`);
+    navigate(`/${path}`);
   }
   window.location.reload();
 }
