@@ -35,8 +35,7 @@ a {
   text-decoration: none;
 }
 
-input[type="text"],
-select {
+input {
   padding: 0.5rem;
   border: 1px solid var(--secondary-color);
   border-radius: 0.25rem;
@@ -148,32 +147,54 @@ button:hover {
   padding: 0;
 }
 .userProfile {
-  background-color: var(--main-color);
-  border: 1px solid var(--white-color);
-  max-width: 4rem;
-  height: auto;
+  border-top: 1px solid var(--white-color);
+  border-bottom: 1px solid var(--white-color);
+  padding-left: 1rem;
+  max-width: 8rem;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
-  font-size: 0.6rem;
-  padding: 0.15rem;
+  justify-content: right;
+  font-size: 0.8rem;
   border-radius: 1rem;
   position: absolute;
   top: 0;
   right: 0;
 }
 
-.userProfile figure {
-  padding: 0;
-  padding-right: 0.1rem;
-  margin: 0;
-  width: 50%;
-}
 .userProfile img {
-  width: 100%;
-  height: auto;
+  width: 50%;
+  height: 50%;
 }
+
+.alter_article {
+  display: flex;
+  flex-direction: row;
+  color: var(--black-color);
+  background-color: var(--primary-color);
+  border: 1px solid var(--secondary-color);
+  margin: 1rem 0;
+  justify-content: space-between;
+  padding: 1rem 0;
+  border-radius: 0.25rem;
+  margin-bottom: rem;
+}
+
+.alter_article * {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  select {
+    width: 75%;
+  }
+}
+
+.sort_button {
+  margin: 1rem;
+  width: 25%;
+}
+
 @media screen and (min-width: 768px) {
   .article {
     width: 25%;

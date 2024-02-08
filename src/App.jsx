@@ -9,7 +9,7 @@ function App() {
 
   useEffect(() => {
     fetchUsers().then((res) => {
-      setUser(res[2]);
+      setUser(res[0]);
     });
   }, []);
   return (

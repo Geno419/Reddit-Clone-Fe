@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   fetchCommentsByArticleId,
-  formatDate,
   fetchArticleByArticleId,
   patchVoteByID,
   postComment,
   removeCommentFromDB,
 } from "../utils/api";
+import { formatDate } from "../utils/functions";
 
 export default function SingleArticle(props) {
   const [comments, setComments] = useState([]);
@@ -16,7 +16,7 @@ export default function SingleArticle(props) {
   const [voted, setVoted] = useState(false);
   const { article_id } = useParams();
   const { user } = props;
-
+  const commentMessageToUser = document.getElementById("message_to_user");
   useEffect(() => {
     fetchArticleByArticleId(article_id).then(({ result }) => {
       setSingleArticle(result[0]);
@@ -46,40 +46,51 @@ export default function SingleArticle(props) {
     }
   }
   function addComment(event) {
-    event.preventDefault();
-    const newComment = {
-      author: user.username,
-      body: event.target[0].value,
-      created_at: new Date(),
-      votes: 0,
-    };
-    const packageComment = {
-      username: user.username,
-      body: event.target[0].value,
-    };
-    event.target[0].value = "";
-    const holdComments = [...comments];
-    setComments([newComment, ...comments]);
-    postComment(article_id, packageComment).then((res) => {
-      setComments([res.data.comment[0], ...holdComments]);
-    });
+    commentMessageToUser.innerText = "Posting...";
+
+    const body = event.target[0].value;
+    if (body.length <= 3) {
+      event.preventDefault();
+      commentMessageToUser.innerText =
+        "Comments need to be more than 3 characters";
+    } else {
+      event.preventDefault();
+      const newComment = {
+        username: user.username,
+        body: body,
+      };
+      event.target[0].value = "";
+      postComment(article_id, newComment)
+        .then((res) => {
+          setComments([res.data.comment[0], ...comments]);
+        })
+        .then(() => {
+          commentMessageToUser.innerText = "Comment has been posted";
+        });
+    }
   }
-  function deleteComment(comment_id) {
-    setComments(
-      comments.filter((comment) => comment.comment_id !== comment_id)
-    );
-    removeCommentFromDB(comment_id);
+  function deleteComment(currentComment) {
+    commentMessageToUser.innerText = "Deleting...";
+
+    removeCommentFromDB(currentComment.comment_id).then(() => {
+      setComments(
+        comments.filter(
+          (comment) => comment.comment_id !== currentComment.comment_id
+        )
+      );
+      commentMessageToUser.innerText = "Comment has been deleted";
+    });
   }
   function createDeleteButton(comment) {
     if (user.username === comment.author) {
       return (
         <button
           onClick={() => {
-            deleteComment(comment.comment_id);
+            deleteComment(comment);
           }}
           className="deleteButton"
         >
-          bin
+          delete
         </button>
       );
       S;
@@ -119,6 +130,7 @@ export default function SingleArticle(props) {
         <form onSubmit={addComment} className="addComment">
           <label htmlFor="newComment"></label>
           <input type="text" placeholder="add a comment" />
+          <div id="message_to_user" alert="alert"></div>
         </form>
 
         <div className="comments">
