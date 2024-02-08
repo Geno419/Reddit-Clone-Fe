@@ -7,14 +7,9 @@ export default function Header(props) {
       <Link to="/">
         <h1>GEDDIT</h1>
       </Link>
-      <div className="userProfile">
-        <aside>
-          <p>{user.username}</p>
-        </aside>
-        <figure>
-          <img src={user.avatar_url} alt={`${user.name} profile picture`} />
-        </figure>
-      </div>
+      <figure className="userProfile">
+        <img src={user.avatar_url} alt={`${user.name} profile picture`} />
+      </figure>
     </header>
   );
 }
