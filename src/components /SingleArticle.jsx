@@ -3,12 +3,17 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   fetchCommentsByArticleId,
   fetchArticleByArticleId,
-  patchVoteByID,
-  postComment,
-  removeCommentFromDB,
 } from "../utils/api";
 import { formatDate } from "../utils/functions";
-import { SingleArticleCard, AddComments, LoadComments } from "./Index";
+import { SingleArticleCard, AddComments } from "./Index";
+import LoadComments from "./LoadComments";
+import {
+  upVote,
+  downVote,
+  addComment,
+  deleteComment,
+  createDeleteButton,
+} from "../utils/SingleArticleFunc";
 
 export default function SingleArticle(props) {
   const navigate = useNavigate();
@@ -40,94 +45,6 @@ export default function SingleArticle(props) {
     });
   }, []);
 
-  function upVote() {
-    if (downVoted === true) {
-      setVote(vote + 2);
-      patchVoteByID(article_id, { IncrementBy: "2" });
-      setDownVoted(false);
-      setUpVoted(true);
-    } else if (upVoted === false) {
-      setVote(vote + 1);
-      patchVoteByID(article_id, { IncrementBy: "1" });
-      setUpVoted(true);
-    } else if (upVoted === true) {
-      setVote(vote - 1);
-      patchVoteByID(article_id, { IncrementBy: "-1" });
-      setUpVoted(false);
-    }
-  }
-  function downVote() {
-    if (upVoted === true) {
-      setVote(vote - 2);
-      patchVoteByID(article_id, { IncrementBy: "-2" });
-      setUpVoted(false);
-      setDownVoted(true);
-    } else if (downVoted === false) {
-      setVote(vote - 1);
-      patchVoteByID(article_id, { IncrementBy: "-1" });
-      setDownVoted(true);
-    } else if (downVoted === true) {
-      setVote(vote + 1);
-      patchVoteByID(article_id, { IncrementBy: "1" });
-      setDownVoted(false);
-    }
-  }
-  function addComment(event) {
-    commentMessageToUser.style.color = "white";
-    commentMessageToUser.innerText = "Posting...";
-
-    const body = event.target[0].value;
-    if (body.length <= 3) {
-      event.preventDefault();
-      commentMessageToUser.innerText =
-        "Comments need to be more than 3 characters";
-      commentMessageToUser.style.color = "red";
-    } else {
-      event.preventDefault();
-      const newComment = {
-        username: user.username,
-        body: body,
-      };
-      event.target[0].value = "";
-      postComment(article_id, newComment)
-        .then((res) => {
-          setComments([res.data.comment[0], ...comments]);
-        })
-        .then(() => {
-          commentMessageToUser.innerText = "Comment has been posted";
-          commentMessageToUser.style.color = "green";
-        });
-    }
-  }
-  function deleteComment(currentComment) {
-    commentMessageToUser.style.color = "white";
-    commentMessageToUser.innerText = "Deleting...";
-
-    removeCommentFromDB(currentComment.comment_id).then(() => {
-      setComments(
-        comments.filter(
-          (comment) => comment.comment_id !== currentComment.comment_id
-        )
-      );
-      commentMessageToUser.innerText = "Comment has been deleted";
-      commentMessageToUser.style.color = "green";
-    });
-  }
-  function createDeleteButton(comment) {
-    if (user.username === comment.author) {
-      return (
-        <button
-          onClick={() => {
-            deleteComment(comment);
-          }}
-          className="deleteButton"
-        >
-          delete
-        </button>
-      );
-    }
-  }
-
   return (
     <>
       {loading ? (
@@ -137,16 +54,57 @@ export default function SingleArticle(props) {
           <SingleArticleCard
             singleArticle={singleArticle}
             vote={vote}
-            upVote={upVote}
-            downVote={downVote}
+            upVote={() =>
+              upVote(
+                article_id,
+                vote,
+                upVoted,
+                downVoted,
+                setVote,
+                setUpVoted,
+                setDownVoted
+              )
+            }
+            downVote={() =>
+              downVote(
+                article_id,
+                vote,
+                upVoted,
+                downVoted,
+                setVote,
+                setUpVoted,
+                setDownVoted
+              )
+            }
             comments={comments}
           />
-          <AddComments addComment={addComment} user={user} />
+          <AddComments
+            addComment={(event) =>
+              addComment(
+                event,
+                article_id,
+                user,
+                comments,
+                setComments,
+                commentMessageToUser
+              )
+            }
+            user={user}
+          />
           <div id="message_to_user" alert="alert"></div>
 
           <LoadComments
             comments={comments}
-            createDeleteButton={createDeleteButton}
+            createDeleteButton={(comment) =>
+              createDeleteButton(user, comment, (currentComment) =>
+                deleteComment(
+                  currentComment,
+                  comments,
+                  setComments,
+                  commentMessageToUser
+                )
+              )
+            }
             formatDate={formatDate}
           />
         </article>
