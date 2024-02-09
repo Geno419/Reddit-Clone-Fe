@@ -8,6 +8,7 @@ import {
   removeCommentFromDB,
 } from "../utils/api";
 import { formatDate } from "../utils/functions";
+import { SingleArticleCard, AddComments, LoadComments } from "./Index";
 
 export default function SingleArticle(props) {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ export default function SingleArticle(props) {
   const { article_id } = useParams();
   const { user } = props;
   const commentMessageToUser = document.getElementById("message_to_user");
+
   useEffect(() => {
     fetchArticleByArticleId(article_id)
       .then(({ result }) => {
@@ -54,7 +56,6 @@ export default function SingleArticle(props) {
       setUpVoted(false);
     }
   }
-
   function downVote() {
     if (upVoted === true) {
       setVote(vote - 2);
@@ -71,7 +72,6 @@ export default function SingleArticle(props) {
       setDownVoted(false);
     }
   }
-
   function addComment(event) {
     commentMessageToUser.style.color = "white";
     commentMessageToUser.innerText = "Posting...";
@@ -125,7 +125,6 @@ export default function SingleArticle(props) {
           delete
         </button>
       );
-      S;
     }
   }
 
@@ -135,49 +134,21 @@ export default function SingleArticle(props) {
         <p>Loading...</p>
       ) : (
         <article className="single_article">
-          <div>
-            <div className="title">
-              <h3>{singleArticle.title}</h3>
-            </div>
-            <p>{singleArticle.body}</p>
-            <figure>
-              <img
-                src={singleArticle.article_img_url}
-                alt={`Image for ${singleArticle.authors} post`}
-              />
-            </figure>
-            <div className="article_author">
-              <p>{`Post created by: ${singleArticle.author}`}</p>
-            </div>
-            <div className=" single_article_details">
-              <p>{`Votes: ${vote} `}</p>
-              <button onClick={upVote}>up vote</button>
-              <button onClick={downVote}>down vote</button>
-              <p>{`comments: ${comments.length} `}</p>
-            </div>
-            <p className="date">{formatDate(singleArticle.created_at)}</p>
-          </div>
-          <form onSubmit={addComment} className="addComment">
-            <figure className="comment_profile_pic">
-              <img src={user.avatar_url} alt={`${user.name} profile picture`} />
-            </figure>
-            <label htmlFor="newComment"></label>
-            <input type="text" placeholder="Add a comment" />
-            <button>Submit</button>
-          </form>
+          <SingleArticleCard
+            singleArticle={singleArticle}
+            vote={vote}
+            upVote={upVote}
+            downVote={downVote}
+            comments={comments}
+          />
+          <AddComments addComment={addComment} user={user} />
           <div id="message_to_user" alert="alert"></div>
 
-          <div className="comments">
-            {comments.map((comment) => (
-              <div className="comment" key={comment.comment_id}>
-                <h5>{comment.author}</h5>
-                <p>{comment.body}</p>
-                <p>{`votes: ${comment.votes}`}</p>
-                <p className="date">{formatDate(comment.created_at)}</p>
-                {createDeleteButton(comment)}
-              </div>
-            ))}
-          </div>
+          <LoadComments
+            comments={comments}
+            createDeleteButton={createDeleteButton}
+            formatDate={formatDate}
+          />
         </article>
       )}
     </>
